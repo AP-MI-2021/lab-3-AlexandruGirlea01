@@ -2,7 +2,8 @@ def tipareste_meniu():
     print("1. Citire date")
     print("2. Cea mai lunga secventa in care toate elementele sunt patrate perfecte")
     print("3. Cea mai lunga secventa in care toate elementele au acelasi numar de biti de 1 in reprezentarea binara")
-    print("4. Iesire")
+    print("4. Cea mai lunga secventa in care toate elementele sunt pare")
+    print("5. Iesire")
 
 
 def citeste_lista(lista: list) -> list[int]:
@@ -133,6 +134,44 @@ def test_get_longest_same_bit_counts():
     assert (get_longest_same_bit_counts([14, 19, 21, 30, 31])) == [14, 19, 21]
 
 
+def toate_elementele_pare(lista: list) -> bool:
+    """
+    Verifica daca toate elementele unei liste sunt pare
+    :param lista: Lista asupra careia se efectueaza verificarea
+    :return: Returneaza True daca toate elementele listei sunt pare sau False in caz contrar
+    """
+    for x in lista:
+        if x % 2 == 1:
+            return False
+    return True
+
+
+def test_toate_elementele_pare():
+    assert(toate_elementele_pare([2, 4, 18, 66])) is True
+    assert(toate_elementele_pare([6, 12, 15, 18])) is False
+    assert (toate_elementele_pare([])) is True
+
+
+def get_longest_all_even(lista: list) -> list[int]:
+    """
+    Determina cea mai lunga subsecventa de numere pare dintr-o lista
+    :param lista: Lista asupra careia se efectueaza determinarea
+    :return: Cea mai lunga subsecventa care contine doar numere pare
+    """
+    subsecventa_max = []
+    for i in range(len(lista)):
+        for j in range(i, len(lista)):
+            if toate_elementele_pare(lista[i:j + 1]) and len(subsecventa_max) < len(lista[i:j + 1]):
+                subsecventa_max = lista[i:j + 1]
+    return subsecventa_max
+
+
+def test_get_longest_all_even():
+    assert(get_longest_all_even([5, 4, 6, 8, 9, 16, 12, ])) == [4, 6, 8]
+    assert (get_longest_all_even([50, 48, 25, 16, 32, 36])) == [16, 32, 36]
+    assert (get_longest_all_even([10, 12, 14, 15, 25])) == [10, 12, 14]
+
+
 def main():
     test_is_perfect_square()
     test_toate_elementele_patrate_perfecte()
@@ -140,6 +179,8 @@ def main():
     test_get_number_of_bits_equal_to_one()
     test_toate_elementele_au_numar_egal_de_biti()
     test_get_longest_same_bit_counts()
+    test_toate_elementele_pare()
+    test_get_longest_all_even()
     while True:
         tipareste_meniu()
         optiune = input("Introduceti optiunea: ")
@@ -151,6 +192,8 @@ def main():
         elif optiune == "3":
             print(get_longest_same_bit_counts(lista))
         elif optiune == "4":
+            print(get_longest_all_even(lista))
+        elif optiune == "5":
             break
         else:
             print("Optiune gresita, incercati din nou!")
